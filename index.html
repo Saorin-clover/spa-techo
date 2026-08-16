@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#fffdf9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="スパ手帳">
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>♨️ スパ手帳</title>
+<style>
+:root{--bg:#fff9f4;--card:#fff;--line:#eadbd0;--text:#40352f;--muted:#786b63;--accent:#e77b4c;--soft:#f8e8de;--danger:#fff0ed}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Yu Gothic","Meiryo",sans-serif;font-size:19px;line-height:1.6}
+header{background:#fffdf9;border-bottom:1px solid var(--line);padding:13px 16px;position:sticky;top:0;z-index:10}
+.header{max-width:900px;margin:auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+.brand{border:0;background:none;font-size:24px;font-weight:800;color:var(--text);padding:0;cursor:pointer}
+nav{display:flex;gap:7px}.navbtn,.btn{border:1px solid var(--line);border-radius:12px;padding:8px 13px;background:#fff;color:var(--text);cursor:pointer}.navbtn{font-size:20px}
+.primary{background:var(--accent);border-color:var(--accent);color:#fff;font-weight:700}.danger{background:var(--danger);border-color:#edc5be}
+main{max-width:900px;margin:auto;padding:18px 16px 60px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin:13px 0}
+h1{font-size:29px;margin:0 0 14px}h2{font-size:22px;margin:0 0 11px}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.top-add{margin-bottom:12px}.top-add .btn{font-size:20px}.spa-name{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #f0e4dc;background:none;padding:16px 2px;color:var(--text);font-size:22px;font-weight:700;cursor:pointer}.spa-name:last-child{border-bottom:0}
+.list{display:grid;gap:12px}.spa-card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px}.topline{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.name{border:0;background:none;padding:0;text-align:left;font-size:23px;font-weight:800;color:var(--text);cursor:pointer}.stars{white-space:nowrap}.star{border:0;background:none;padding:0;font-size:23px;cursor:pointer}
+.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:13px}.metric{background:#f8eee8;border-radius:12px;padding:9px}.metric small{display:block;color:var(--muted);font-size:13px}.metric b{font-size:16px}
+.detail-nav{font-size:20px}.edit-spa-btn{font-size:20px;font-weight:700}.detail-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.site{border:0;background:none;padding:0;font-size:23px;text-decoration:none;color:inherit;cursor:pointer}
+.info-item{padding:10px 0;border-bottom:1px solid #f0e4dc}.info-item:last-child{border-bottom:0}
+.visit-list{display:grid;gap:8px}.visit-date{display:block;width:100%;text-align:left;border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:#fffaf7;color:var(--text);font-weight:700;font-size:20px;cursor:pointer}
+.visit-head{display:grid;grid-template-columns:145px minmax(0,1fr);column-gap:34px;align-items:start}
+label{display:block;font-weight:700;margin:6px 0 4px}input,select,textarea{width:100%;border:1px solid #d9cbc2;border-radius:12px;background:#fff;color:var(--text);padding:9px 11px;font:inherit}
+.date-small input{font-size:17px;padding:7px}.route{display:grid;grid-template-columns:1fr 1fr;gap:13px}.route textarea{min-height:125px}.small{font-size:14px;color:var(--muted)}
+.fare-row{display:grid;grid-template-columns:minmax(0,1fr) 78px auto;gap:8px;align-items:center}.amount{text-align:right;font-variant-numeric:tabular-nums}
+.price-row{display:grid;grid-template-columns:minmax(0,1fr) 120px 65px auto;gap:8px;align-items:center;margin:8px 0}.total{text-align:right;font-size:25px;font-weight:800;margin-top:13px}.per{text-align:right;font-size:15px;color:var(--muted)}
+.paste{border:2px dashed #e1cec2;border-radius:14px;padding:13px;text-align:center;background:#fffaf7}.preview{position:relative;display:inline-block;margin-top:10px}.preview img{max-width:310px;width:100%;border-radius:12px}.preview button{position:absolute;right:6px;top:6px}
+.photos{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-top:11px}.photo{position:relative}.photo img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px}.photo button{position:absolute;right:4px;top:4px;border:0;border-radius:8px;background:#fffdf9dd;padding:3px 8px}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.visit-actions .btn{font-size:20px}.list-back .btn,.visit-list-back .btn{font-size:20px}
+.modal{position:fixed;inset:0;background:#0008;display:flex;align-items:center;justify-content:center;padding:15px;z-index:50}.dialog{background:#fff;border-radius:20px;padding:21px;width:min(600px,100%);box-shadow:0 12px 40px #0003}.dialog h2{margin-top:0}
+.notice{font-size:14px;color:var(--muted);margin-top:6px}
+@media(max-width:650px){.metrics{grid-template-columns:1fr 1fr}.route{grid-template-columns:1fr}.photos{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:500px){.visit-head{grid-template-columns:120px minmax(0,1fr);column-gap:28px}.price-row{grid-template-columns:minmax(0,1fr) 105px 60px auto}}
+</style>
+</head>
+<body>
+<header><div class="header">
+<button class="brand" onclick="topPage()">♨️ スパ手帳</button>
+<nav><button class="navbtn" onclick="spaList()">一覧</button><button class="navbtn" onclick="allVisits()">訪問記録</button></nav>
+</div></header>
+<main id="app"></main>
+<div id="modal"></div>
+<script>
+const KEY="spa_techo_v4";
+const defaultSpas=[
+{id:"laqua",name:"スパ ラクーア",rock:4,access:"—",fee:"—",quiet:"未評価",favorite:0,site:"https://www.laqua.jp/spa/",facility:["天然温泉","サウナ","休憩スペース","レストラン・カフェ"],feature:"都会の中で温泉・岩盤浴・サウナを楽しめる。"},
+{id:"miyamaedaira",name:"宮前平源泉 湯けむりの庄",rock:4,access:"—",fee:"—",quiet:"★★★★★",favorite:0,site:"https://www.yukemurinosato.com/miyamaedaira/",facility:["天然温泉","サウナ","休憩スペース","食事処"],feature:"源泉と岩盤浴をゆっくり楽しめる。"}
+];
+let db;
+try{db=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){db=null}
+if(!db)db={spas:defaultSpas,visits:[]};
+db.spas=Array.isArray(db.spas)&&db.spas.length?db.spas:defaultSpas;
+db.visits=Array.isArray(db.visits)?db.visits:[];
+
+function saveDB(){localStorage.setItem(KEY,JSON.stringify(db))}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function fmt(n){return Math.round(Number(n)||0).toLocaleString("ja-JP")}
+function num(v){return Number(String(v??"").replace(/,/g,""))||0}
+function uid(p){return p+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function findSpa(id){return db.spas.find(s=>s.id===id)}
+function findVisit(id){return db.visits.find(v=>v.id===id)}
+
+function topPage(){
+document.getElementById("app").innerHTML=`<div class="top-add"><button class="btn primary" onclick="spaEditor()">＋追加</button></div>
+<div class="card">${db.spas.map(s=>`<button class="spa-name" onclick="spaDetail('${s.id}')">${esc(s.name)}</button>`).join("")}</div>`;
+}
+
+function spaList(){
+document.getElementById("app").innerHTML=`<div class="row list-back" style="margin-bottom:12px"><button class="btn" onclick="topPage()">← 戻る</button></div>
+<div class="list">${db.spas.map(s=>`<div class="spa-card"><div class="topline"><button class="name" onclick="spaDetail('${s.id}')">${esc(s.name)}</button><div class="stars">${[1,2,3,4,5].map(i=>`<button class="star" onclick="event.stopPropagation();setFav('${s.id}',${i})">${i<=s.favorite?"⭐":"☆"}</button>`).join("")}</div></div>
+<div class="metrics"><div class="metric"><small>🪨 岩盤浴</small><b>${esc(s.rock)}種類</b></div><div class="metric"><small>🚃 アクセス</small><b>${esc(s.access)}</b></div><div class="metric"><small>💰 料金</small><b>${esc(s.fee)}</b></div><div class="metric"><small>🤫 静かさ</small><b>${esc(s.quiet)}</b></div></div></div>`).join("")}</div>`;
+}
+function setFav(id,n){const s=findSpa(id);if(s){s.favorite=n;saveDB();spaList()}}
+
+function spaDetail(id){
+const s=findSpa(id);if(!s)return topPage();
+const vs=db.visits.filter(v=>v.spaId===id).sort((a,b)=>b.date.localeCompare(a.date));
+document.getElementById("app").innerHTML=`<div class="row">
+<button class="btn detail-nav" onclick="spaList()">← 戻る</button><button class="btn detail-nav" onclick="visitList('${id}')">訪問記録</button><button class="btn primary detail-nav" onclick="visitEditor('${id}')">＋記録</button>
+</div>
+<div class="card"><div class="detail-title"><h1>${esc(s.name)}</h1><a class="site" href="${esc(s.site)}" target="_blank" rel="noopener" aria-label="公式サイト">🌐</a></div>
+<div class="actions" style="margin-top:8px"><button class="btn edit-spa-btn" onclick="spaEditor('${id}')">編集</button></div>
+<div class="stars">${[1,2,3,4,5].map(i=>`<button class="star" onclick="setFavDetail('${id}',${i})">${i<=s.favorite?"⭐":"☆"}</button>`).join("")}</div>
+<div style="margin-top:10px"><b>🪨 岩盤浴　${esc(s.rock)}種類</b></div></div>
+<div class="card"><h2>施設情報</h2>${s.facility.map(x=>`<div class="info-item">${esc(x)}</div>`).join("")}</div>
+<div class="card"><h2>料金</h2><div>${esc(s.fee)}</div></div>
+<div class="card"><h2>アクセス</h2><div>${esc(s.access)}</div></div>
+<div class="card"><h2>特徴</h2><div>${esc(s.feature)}</div></div>
+<div class="card"><h2>訪問記録</h2><div class="visit-list">${vs.length?vs.map(v=>`<button class="visit-date" onclick="visitEditor('${id}','${v.id}')">${esc(v.date)}</button>`).join(""):'<div class="small">まだ訪問記録はありません。</div>'}</div></div>
+<div class="notice">※ スパ名称の横の🌐から公式サイトを開けます。</div>`;
+}
+function setFavDetail(id,n){const s=findSpa(id);if(s){s.favorite=n;saveDB();spaDetail(id)}}
+
+function visitList(spaId){
+const s=findSpa(spaId);const vs=db.visits.filter(v=>v.spaId===spaId).sort((a,b)=>b.date.localeCompare(a.date));
+document.getElementById("app").innerHTML=`<div class="row visit-list-back"><button class="btn" onclick="spaDetail('${spaId}')">← 戻る</button></div><div class="card"><div class="visit-list">${vs.length?vs.map(v=>`<button class="visit-date" onclick="visitEditor('${spaId}','${v.id}')">${esc(v.date)}</button>`).join(""):'<div class="small">まだ訪問記録はありません。</div>'}</div></div>`;
+}
+
+function allVisits(){
+const vs=[...db.visits].sort((a,b)=>b.date.localeCompare(a.date));
+document.getElementById("app").innerHTML=`<div class="row visit-list-back"><button class="btn" onclick="topPage()">← 戻る</button></div><div class="card"><div class="visit-list">${vs.length?vs.map(v=>{const s=findSpa(v.spaId);return `<button class="visit-date" onclick="visitEditor('${v.spaId}','${v.id}')">${esc(v.date)}　${esc(s?.name||"")}</button>`}).join(""):'<div class="small">まだ訪問記録はありません。</div>'}</div></div>`;
+}
+
+function spaEditor(id=null){
+const s=id?findSpa(id):{name:"",rock:"",access:"",fee:"",quiet:"",favorite:0,site:"",facility:[],feature:""};
+document.getElementById("app").innerHTML=`<div class="row"><button class="btn" onclick="topPage()">← 戻る</button></div>
+<div class="card"><h1>${id?"スパ情報を編集":"スパ登録"}</h1>
+<label>スパ名称</label><input id="sn" value="${esc(s.name)}">
+<label>公式サイト</label><input id="ss" value="${esc(s.site)}" placeholder="https://">
+<label>岩盤浴の数</label><input id="sr" inputmode="numeric" value="${esc(s.rock||"")}">
+<label>アクセス</label><input id="sa" value="${esc(s.access||"")}">
+<label>料金</label><input id="sf" value="${esc(s.fee||"")}">
+<label>静かさ</label><input id="sq" value="${esc(s.quiet||"")}">
+<label>特徴</label><textarea id="sx" placeholder="施設の特徴">${esc(s.feature||"")}</textarea>
+<div class="actions" style="margin-top:14px"><button class="btn primary" onclick="saveSpa('${id||""}')">保存</button>${id?`<button class="btn danger" onclick="askDeleteSpa('${id}')">削除</button>`:""}</div>
+</div>`;
+}
+function saveSpa(id){
+const name=document.getElementById("sn").value.trim();
+if(!name){openModal(`<h2>スパ名称を入力してください</h2><div style="text-align:right"><button class="btn primary" onclick="closeModal()">OK</button></div>`);return}
+const s=id?findSpa(id):{id:uid("spa"),facility:[],favorite:0};
+s.name=name;s.site=document.getElementById("ss").value.trim();s.rock=document.getElementById("sr").value.trim();s.access=document.getElementById("sa").value.trim();s.fee=document.getElementById("sf").value.trim();s.quiet=document.getElementById("sq").value.trim();s.feature=document.getElementById("sx").value.trim();
+if(!id)db.spas.push(s);saveDB();
+openModal(`<h2>保存しました</h2><div style="text-align:right"><button class="btn primary" onclick="closeModal();topPage()">OK</button></div>`);
+}
+function askDeleteSpa(id){
+const s=findSpa(id);if(!s)return;
+openModal(`<h2>「${esc(s.name)}」を削除しますか？</h2><div class="actions" style="justify-content:flex-end"><button class="btn" onclick="closeModal()">キャンセル</button><button class="btn danger" onclick="confirmDeleteSpa('${id}')">OK</button></div>`);
+}
+function confirmDeleteSpa(id){
+db.spas=db.spas.filter(s=>s.id!==id);db.visits=db.visits.filter(v=>v.spaId!==id);saveDB();
+openModal(`<h2>削除しました</h2><div style="text-align:right"><button class="btn primary" onclick="closeModal();topPage()">OK</button></div>`);
+}
+let currentSpaId="",currentVisitId="";
+function newVisitData(spaId){return{id:uid("visit"),spaId,date:new Date().toISOString().slice(0,10),companion:"ひとり",outbound:"",returnRoute:"",transportFare:"",transportQty:"1",fees:[{name:"入館料",price:"",qty:"1"}],memo:"",receipt:"",photos:[]}}
+function visitEditor(spaId,visitId=null){
+currentSpaId=spaId;currentVisitId=visitId||"";
+const old=visitId?findVisit(visitId):null;const v=old?JSON.parse(JSON.stringify(old)):newVisitData(spaId);
+window.currentVisit=v;
+document.getElementById("app").innerHTML=`<div class="card"><div class="actions"><button class="btn" onclick="spaDetail('${spaId}')">← 戻る</button><h1 style="margin:0;font-size:28px">訪問記録</h1></div></div>
+<div class="card"><div class="visit-head"><div class="date-small"><label>訪問日</label><input id="vdate" type="date" value="${esc(v.date)}"></div><div><label>同行者</label><select id="vcomp">${["ひとり","二人","友人","その他"].map(x=>`<option ${x===v.companion?"selected":""}>${x}</option>`).join("")}</select></div></div>
+<label>訪問したスパ</label><input value="${esc(findSpa(spaId)?.name||"")}" disabled></div>
+<div class="card"><h2>🚃 アクセス</h2><div class="route"><div><label>往路</label><textarea id="outbound" onclick="editRoute('outbound')">${esc(v.outbound)}</textarea></div><div><label>復路</label><textarea id="returnRoute" onclick="editRoute('returnRoute')">${esc(v.returnRoute)}</textarea></div></div>
+<a class="btn" href="https://transit.yahoo.co.jp/" target="_blank" rel="noopener">Yahoo!路線検索</a>
+<label>交通費（片道）</label><div class="fare-row"><input id="tfare" class="amount" inputmode="numeric" value="${esc(v.transportFare)}" placeholder="片道料金"><input id="tqty" class="amount" inputmode="numeric" value="${esc(v.transportQty||"1")}" placeholder="個数"><span>× 2（往復）</span></div><div class="small">片道料金 × 個数 × 2 を合計に反映</div></div>
+<div class="card"><h2>💰 料金</h2><div id="fees"></div><button class="btn" onclick="addFee()">＋料金項目を追加</button><div id="total" class="total"></div><div id="per" class="per"></div>
+<div class="paste" style="margin-top:14px">🧾 レシート写真<br><input id="receiptInput" type="file" accept="image/*" onchange="addReceipt(this.files[0])"><div id="receipt"></div></div></div>
+<div class="card"><h2>📝 メモ</h2><textarea id="memo" placeholder="感想・気づきなど">${esc(v.memo)}</textarea></div>
+<div class="card"><h2>📷 写真の記録</h2><div class="paste">写真を追加<br><input id="photoInput" type="file" accept="image/*" multiple onchange="addPhotos(this.files)"><p class="small">複数枚追加できます。</p></div><div id="photos" class="photos"></div></div>
+<div class="actions visit-actions"><button class="btn primary" onclick="askSaveVisit()">保存</button><button class="btn danger" onclick="askDeleteVisit()">削除</button><button class="btn" onclick="spaDetail('${spaId}')">戻る</button></div>`;
+renderFees(v.fees||[{name:"入館料",price:"",qty:"1"}]);renderReceipt(v.receipt);renderPhotos(v.photos||[]);bindVisitInputs();calcVisit();
+}
+function bindVisitInputs(){
+["tfare","tqty"].forEach(id=>{const e=document.getElementById(id);e.addEventListener("focus",()=>{if(e.value==="1")e.value=""});e.addEventListener("input",()=>{e.value=e.value.replace(/[^0-9,]/g,"");calcVisit()})});
+document.getElementById("vcomp").addEventListener("change",calcVisit);
+}
+function renderFees(fees){
+const box=document.getElementById("fees");box.innerHTML="";
+fees.forEach((f,i)=>{const d=document.createElement("div");d.className="price-row fee";d.innerHTML=`<input class="fee-name" value="${esc(f.name||"")}"><input class="amount fee-price" inputmode="numeric" value="${esc(f.price||"")}"><input class="amount fee-qty" inputmode="numeric" value="${esc(f.qty||"1")}"><button class="btn danger">削除</button>`;d.querySelector("button").onclick=()=>{d.remove();calcVisit()};d.querySelectorAll(".amount").forEach(x=>{x.addEventListener("focus",()=>{if(x.value==="1")x.value=""});x.addEventListener("input",()=>{x.value=x.value.replace(/[^0-9,]/g,"");calcVisit()})});box.appendChild(d)});
+}
+function addFee(){const fees=getFees();fees.push({name:"",price:"",qty:"1"});renderFees(fees);calcVisit();document.querySelector("#fees .fee:last-child .fee-name").focus()}
+function getFees(){return [...document.querySelectorAll("#fees .fee")].map(r=>({name:r.querySelector(".fee-name").value,price:r.querySelector(".fee-price").value.replace(/,/g,""),qty:r.querySelector(".fee-qty").value.replace(/,/g,"")||"1"}))}
+function calcVisit(){let total=num(document.getElementById("tfare")?.value)*num(document.getElementById("tqty")?.value||1)*2;getFees().forEach(f=>total+=num(f.price)*num(f.qty||1));document.getElementById("total").textContent="合計 "+fmt(total)+"円";const p=document.getElementById("vcomp")?.value==="二人"?2:1;document.getElementById("per").textContent="1人あたり "+fmt(total/p)+"円"}
+function editRoute(which){const el=document.getElementById(which);openModal(`<h2>${which==="outbound"?"往路":"復路"}を編集</h2><textarea id="routeEdit" style="min-height:330px;font-size:21px">${esc(el.value)}</textarea><div style="text-align:right;margin-top:10px"><button class="btn" onclick="closeModal()">キャンセル</button> <button class="btn primary" onclick="saveRoute('${which}')">決定</button></div>`)}
+function saveRoute(which){document.getElementById(which).value=document.getElementById("routeEdit").value;closeModal()}
+function openModal(body){document.getElementById("modal").innerHTML=`<div class="modal"><div class="dialog">${body}</div></div>`}
+function closeModal(){document.getElementById("modal").innerHTML=""}
+function addReceipt(file){if(!file)return;const r=new FileReader();r.onload=e=>{window.currentVisit.receipt=e.target.result;renderReceipt(e.target.result)};r.readAsDataURL(file)}
+function renderReceipt(src){const box=document.getElementById("receipt");box.innerHTML=src?`<div class="preview"><img src="${src}"><button class="btn danger" onclick="removeReceipt()">削除</button></div>`:""}
+function removeReceipt(){window.currentVisit.receipt="";document.getElementById("receipt").innerHTML="";document.getElementById("receiptInput").value=""}
+function addPhotos(files){[...files].forEach(file=>{const r=new FileReader();r.onload=e=>{window.currentVisit.photos.push(e.target.result);renderPhotos(window.currentVisit.photos)};r.readAsDataURL(file)})}
+function renderPhotos(arr){const box=document.getElementById("photos");box.innerHTML=(arr||[]).map((src,i)=>`<div class="photo"><img src="${src}"><button onclick="window.currentVisit.photos.splice(${i},1);renderPhotos(window.currentVisit.photos)">✕</button></div>`).join("")}
+function collectVisit(){const v=window.currentVisit;v.date=document.getElementById("vdate").value;v.companion=document.getElementById("vcomp").value;v.outbound=document.getElementById("outbound").value;v.returnRoute=document.getElementById("returnRoute").value;v.transportFare=document.getElementById("tfare").value.replace(/,/g,"");v.transportQty=document.getElementById("tqty").value.replace(/,/g,"")||"1";v.fees=getFees();v.memo=document.getElementById("memo").value;return v}
+function askSaveVisit(){openModal(`<h2>訪問記録を保存していいですか？</h2><div class="actions" style="justify-content:flex-end"><button class="btn" onclick="closeModal()">キャンセル</button><button class="btn primary" onclick="confirmSaveVisit()">OK</button></div>`)}
+function confirmSaveVisit(){const v=collectVisit();const idx=db.visits.findIndex(x=>x.id===v.id);if(idx>=0)db.visits[idx]=v;else db.visits.push(v);saveDB();openModal(`<h2>保存しました</h2><div class="actions" style="justify-content:flex-end"><button class="btn primary" onclick="closeModal();spaDetail('${v.spaId}')">OK</button></div>`)}
+function askDeleteVisit(){openModal(`<h2>この訪問記録を削除しますか？</h2><div class="actions" style="justify-content:flex-end"><button class="btn" onclick="closeModal()">キャンセル</button><button class="btn danger" onclick="confirmDeleteVisit()">OK</button></div>`)}
+function confirmDeleteVisit(){const id=window.currentVisit.id;db.visits=db.visits.filter(v=>v.id!==id);saveDB();closeModal();alert("削除しました");spaDetail(window.currentVisit.spaId)}
+topPage();
+</script>
+</body>
+</html>
