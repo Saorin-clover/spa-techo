@@ -7,9 +7,9 @@
   "theme_color": "#fffdf9",
   "icons": [
     {
-      "src": "./spa-icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
+      "src": "./spa-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
       "purpose": "any maskable"
     }
   ]
