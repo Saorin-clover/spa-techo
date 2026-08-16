@@ -67,6 +67,7 @@ function saveDB(){localStorage.setItem(KEY,JSON.stringify(db))}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function fmt(n){return Math.round(Number(n)||0).toLocaleString("ja-JP")}
 function num(v){return Number(String(v??"").replace(/,/g,""))||0}
+function formatFee(v){return String(v??"").replace(/\d{4,}/g,n=>Number(n).toLocaleString("ja-JP"))}
 function uid(p){return p+Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
 function findSpa(id){return db.spas.find(s=>s.id===id)}
 function findVisit(id){return db.visits.find(v=>v.id===id)}
@@ -79,7 +80,7 @@ document.getElementById("app").innerHTML=`<div class="top-add"><button class="bt
 function spaList(){
 document.getElementById("app").innerHTML=`<div class="row list-back" style="margin-bottom:12px"><button class="btn" onclick="topPage()">← 戻る</button></div>
 <div class="list">${db.spas.map(s=>`<div class="spa-card"><div class="topline"><button class="name" onclick="spaDetail('${s.id}')">${esc(s.name)}</button><div class="stars">${[1,2,3,4,5].map(i=>`<button class="star" onclick="event.stopPropagation();setFav('${s.id}',${i})">${i<=s.favorite?"⭐":"☆"}</button>`).join("")}</div></div>
-<div class="metrics"><div class="metric"><small>🪨 岩盤浴</small><b>${esc(s.rock)}種類</b></div><div class="metric"><small>🚃 アクセス</small><b>${esc(s.access)}</b></div><div class="metric"><small>💰 料金</small><b>${esc(s.fee)}</b></div><div class="metric"><small>✨ 特徴</small><b>${esc(s.feature)}</b></div></div></div>`).join("")}</div>`;
+<div class="metrics"><div class="metric"><small>🪨 岩盤浴</small><b>${esc(s.rock)}種類</b></div><div class="metric"><small>🚋 アクセス</small><b>${esc(s.access)}</b></div><div class="metric"><small>💰 料金</small><b>${esc(formatFee(s.fee))}</b></div><div class="metric"><small>✨ 特徴</small><b>${esc(s.feature)}</b></div></div>
 }
 function setFav(id,n){const s=findSpa(id);if(s){s.favorite=n;saveDB();spaList()}}
 
