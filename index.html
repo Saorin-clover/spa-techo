@@ -73,9 +73,25 @@ function uid(p){return p+Date.now().toString(36)+Math.random().toString(36).slic
 function findSpa(id){return db.spas.find(s=>s.id===id)}
 function findVisit(id){return db.visits.find(v=>v.id===id)}
 
+async function backupData(){
+ const data=JSON.stringify(db,null,2);
+ const file=new File([data],"スパ手帳バックアップ.json",{type:"application/json"});
+ try{
+  if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:"スパ手帳バックアップ"});return}
+ }catch(e){if(e&&e.name==="AbortError")return}
+ const a=document.createElement("a");a.href=URL.createObjectURL(file);a.download="スパ手帳バックアップ.json";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000);
+}
+function restoreData(input){
+ const file=input.files[0];if(!file)return;
+ const r=new FileReader();
+ r.onload=()=>{try{const x=JSON.parse(r.result);if(!x||!Array.isArray(x.spas)||!Array.isArray(x.visits))throw new Error();if(!confirm("このバックアップで現在のデータを置き換えます。よろしいですか？"))return;db=x;saveDB();alert("復元しました。スパ手帳を再読み込みします。");location.reload()}catch(e){alert("このバックアップファイルは読み込めませんでした。")}finally{input.value=""}};
+ r.readAsText(file);
+}
+
 function topPage(){
 document.getElementById("app").innerHTML=`<div class="top-add"><button class="btn primary" onclick="spaEditor()">＋追加</button></div>
-<div class="card">${db.spas.map(s=>`<button class="spa-name" onclick="spaDetail('${s.id}')">${esc(s.name)}</button>`).join("")}</div>`;
+<div class="card">${db.spas.map(s=>`<button class="spa-name" onclick="spaDetail('${s.id}')">${esc(s.name)}</button>`).join("")}</div>
+<div class="card"><h2>💾 データ保護</h2><div class="actions"><button class="btn primary" onclick="backupData()">バックアップ</button><button class="btn" onclick="document.getElementById('restoreFile').click()">復元</button><input id="restoreFile" type="file" accept="application/json,.json" style="display:none" onchange="restoreData(this)"></div><div class="notice">登録したスパ・訪問記録をファイルに保存できます。</div></div>`;
 }
 
 function spaList(){
