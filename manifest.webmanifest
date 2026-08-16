@@ -1,0 +1,16 @@
+{
+  "name": "スパ手帳",
+  "short_name": "スパ手帳",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#fff9f4",
+  "theme_color": "#fffdf9",
+  "icons": [
+    {
+      "src": "./spa-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
