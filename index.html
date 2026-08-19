@@ -111,7 +111,6 @@ document.getElementById("app").innerHTML=`<div class="row">
 <div class="actions" style="margin-top:8px"><button class="btn edit-spa-btn" onclick="spaEditor('${id}')">編集</button></div>
 <div class="stars">${[1,2,3,4,5].map(i=>`<button class="star" onclick="setFavDetail('${id}',${i})">${i<=s.favorite?"⭐":"☆"}</button>`).join("")}</div>
 <div style="margin-top:10px"><b>🪨 岩盤浴　${esc(s.rock)}種類</b></div></div>
-<div class="card"><h2>施設情報</h2>${s.facility.map(x=>`<div class="info-item">${esc(x)}</div>`).join("")}</div>
 <div class="card"><h2>料金</h2><div>${esc(s.fee)}</div></div>
 <div class="card"><h2>アクセス</h2><div>${esc(s.access)}</div></div>
 <div class="card"><h2>特徴</h2><div>${esc(s.feature)}</div></div>
@@ -150,7 +149,9 @@ if(!name){openModal(`<h2>スパ名称を入力してください</h2><div style=
 const s=id?findSpa(id):{id:uid("spa"),facility:[],favorite:0};
 s.name=name;s.site=document.getElementById("ss").value.trim();s.rock=document.getElementById("sr").value.trim();s.access=document.getElementById("sa").value.trim();s.fee=document.getElementById("sf").value.trim();s.quiet=document.getElementById("sq").value.trim();s.feature=document.getElementById("sx").value.trim();
 if(!id)db.spas.push(s);saveDB();
-openModal(`<h2>保存しました</h2><div style="text-align:right"><button class="btn primary" onclick="closeModal();topPage()">OK</button></div>`);
+openModal(`<h2>保存しました</h2><div style="text-align:right"><button type="button" id="spaSaveDoneBtn" class="btn primary">OK</button></div>`);
+const btn=document.getElementById("spaSaveDoneBtn");
+if(btn)btn.onclick=()=>{closeModal();setTimeout(()=>topPage(),50)};
 }
 function askDeleteSpa(id){
 const s=findSpa(id);if(!s)return;
@@ -201,7 +202,18 @@ function addPhotos(files){[...files].forEach(file=>{const r=new FileReader();r.o
 function renderPhotos(arr){const box=document.getElementById("photos");box.innerHTML=(arr||[]).map((src,i)=>`<div class="photo"><img src="${src}"><button onclick="window.currentVisit.photos.splice(${i},1);renderPhotos(window.currentVisit.photos)">✕</button></div>`).join("")}
 function collectVisit(){const v=window.currentVisit;v.date=document.getElementById("vdate").value;v.companion=document.getElementById("vcomp").value;v.outbound=document.getElementById("outbound").value;v.returnRoute=document.getElementById("returnRoute").value;v.transportFare=document.getElementById("tfare").value.replace(/,/g,"");v.transportQty=document.getElementById("tqty").value.replace(/,/g,"")||"1";v.fees=getFees();v.memo=document.getElementById("memo").value;return v}
 function askSaveVisit(){openModal(`<h2>訪問記録を保存していいですか？</h2><div class="actions" style="justify-content:flex-end"><button class="btn" onclick="closeModal()">キャンセル</button><button class="btn primary" onclick="confirmSaveVisit()">OK</button></div>`)}
-function confirmSaveVisit(){const v=collectVisit();const idx=db.visits.findIndex(x=>x.id===v.id);if(idx>=0)db.visits[idx]=v;else db.visits.push(v);saveDB();openModal(`<h2>保存しました</h2><div class="actions" style="justify-content:flex-end"><button class="btn primary" onclick="closeModal();spaDetail('${v.spaId}')">OK</button></div>`)}
+let visitSaving=false;
+function confirmSaveVisit(){
+if(visitSaving)return;
+visitSaving=true;
+const v=collectVisit();
+const idx=db.visits.findIndex(x=>x.id===v.id);
+if(idx>=0)db.visits[idx]=v;else db.visits.push(v);
+saveDB();
+openModal(`<h2>保存しました</h2><div class="actions" style="justify-content:flex-end"><button type="button" id="saveDoneBtn" class="btn primary">OK</button></div>`);
+const btn=document.getElementById("saveDoneBtn");
+if(btn)btn.onclick=()=>{closeModal();visitSaving=false;setTimeout(()=>spaDetail(v.spaId),50)};
+}
 function askDeleteVisit(){openModal(`<h2>この訪問記録を削除しますか？</h2><div class="actions" style="justify-content:flex-end"><button class="btn" onclick="closeModal()">キャンセル</button><button class="btn danger" onclick="confirmDeleteVisit()">OK</button></div>`)}
 function confirmDeleteVisit(){const id=window.currentVisit.id;db.visits=db.visits.filter(v=>v.id!==id);saveDB();closeModal();alert("削除しました");spaDetail(window.currentVisit.spaId)}
 topPage();
