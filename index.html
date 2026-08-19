@@ -64,7 +64,10 @@ if(!db)db={spas:defaultSpas,visits:[]};
 db.spas=Array.isArray(db.spas)&&db.spas.length?db.spas:defaultSpas;
 db.visits=Array.isArray(db.visits)?db.visits:[];
 
-function saveDB(){localStorage.setItem(KEY,JSON.stringify(db))}
+function saveDB(){
+try{localStorage.setItem(KEY,JSON.stringify(db));return true}
+catch(e){console.error("saveDB error",e);return false}
+}
 function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
 function fmt(n){return Math.round(Number(n)||0).toLocaleString("ja-JP")}
 function num(v){return Number(String(v??"").replace(/,/g,""))||0}
@@ -195,24 +198,32 @@ function editRoute(which){const el=document.getElementById(which);openModal(`<h2
 function saveRoute(which){document.getElementById(which).value=document.getElementById("routeEdit").value;closeModal()}
 function openModal(body){document.getElementById("modal").innerHTML=`<div class="modal"><div class="dialog">${body}</div></div>`}
 function closeModal(){document.getElementById("modal").innerHTML=""}
-function addReceipt(file){if(!file)return;const r=new FileReader();r.onload=e=>{window.currentVisit.receipt=e.target.result;renderReceipt(e.target.result)};r.readAsDataURL(file)}
+function compressImage(file,maxSize=1280,quality=0.72){return new Promise((resolve,reject)=>{const r=new FileReader();r.onload=e=>{const img=new Image();img.onload=()=>{let w=img.naturalWidth,h=img.naturalHeight;if(Math.max(w,h)>maxSize){const scale=maxSize/Math.max(w,h);w=Math.round(w*scale);h=Math.round(h*scale)}const c=document.createElement("canvas");c.width=w;c.height=h;const ctx=c.getContext("2d");ctx.drawImage(img,0,0,w,h);resolve(c.toDataURL("image/jpeg",quality))};img.onerror=reject;img.src=e.target.result};r.onerror=reject;r.readAsDataURL(file)})}
+function addReceipt(file){if(!file)return;compressImage(file).then(src=>{window.currentVisit.receipt=src;renderReceipt(src)}).catch(()=>{alert("レシート写真の読み込みに失敗しました")})}
 function renderReceipt(src){const box=document.getElementById("receipt");box.innerHTML=src?`<div class="preview"><img src="${src}"><button class="btn danger" onclick="removeReceipt()">削除</button></div>`:""}
 function removeReceipt(){window.currentVisit.receipt="";document.getElementById("receipt").innerHTML="";document.getElementById("receiptInput").value=""}
-function addPhotos(files){[...files].forEach(file=>{const r=new FileReader();r.onload=e=>{window.currentVisit.photos.push(e.target.result);renderPhotos(window.currentVisit.photos)};r.readAsDataURL(file)})}
+function addPhotos(files){[...files].forEach(file=>{compressImage(file).then(src=>{window.currentVisit.photos.push(src);renderPhotos(window.currentVisit.photos)}).catch(()=>alert("写真の読み込みに失敗しました"))})}
 function renderPhotos(arr){const box=document.getElementById("photos");box.innerHTML=(arr||[]).map((src,i)=>`<div class="photo"><img src="${src}"><button onclick="window.currentVisit.photos.splice(${i},1);renderPhotos(window.currentVisit.photos)">✕</button></div>`).join("")}
 function collectVisit(){const v=window.currentVisit;v.date=document.getElementById("vdate").value;v.companion=document.getElementById("vcomp").value;v.outbound=document.getElementById("outbound").value;v.returnRoute=document.getElementById("returnRoute").value;v.transportFare=document.getElementById("tfare").value.replace(/,/g,"");v.transportQty=document.getElementById("tqty").value.replace(/,/g,"")||"1";v.fees=getFees();v.memo=document.getElementById("memo").value;return v}
 function askSaveVisit(){openModal(`<h2>訪問記録を保存していいですか？</h2><div class="actions" style="justify-content:flex-end"><button class="btn" onclick="closeModal()">キャンセル</button><button class="btn primary" onclick="confirmSaveVisit()">OK</button></div>`)}
 let visitSaving=false;
-function confirmSaveVisit(){
+async function confirmSaveVisit(){
 if(visitSaving)return;
 visitSaving=true;
+try{
 const v=collectVisit();
+const before=JSON.stringify(db.visits);
 const idx=db.visits.findIndex(x=>x.id===v.id);
 if(idx>=0)db.visits[idx]=v;else db.visits.push(v);
-saveDB();
+if(!saveDB()){db.visits=JSON.parse(before);throw new Error("storage")}
 openModal(`<h2>保存しました</h2><div class="actions" style="justify-content:flex-end"><button type="button" id="saveDoneBtn" class="btn primary">OK</button></div>`);
 const btn=document.getElementById("saveDoneBtn");
 if(btn)btn.onclick=()=>{closeModal();visitSaving=false;setTimeout(()=>spaDetail(v.spaId),50)};
+}catch(e){
+visitSaving=false;
+openModal(`<h2>保存できませんでした</h2><p>iPhoneの保存容量を確認してください。写真が多い場合は、写真を少し減らしてからもう一度保存してください。</p><div style="text-align:right"><button type="button" class="btn primary" onclick="closeModal()">OK</button></div>`);
+console.error(e);
+}
 }
 function askDeleteVisit(){openModal(`<h2>この訪問記録を削除しますか？</h2><div class="actions" style="justify-content:flex-end"><button class="btn" onclick="closeModal()">キャンセル</button><button class="btn danger" onclick="confirmDeleteVisit()">OK</button></div>`)}
 function confirmDeleteVisit(){const id=window.currentVisit.id;db.visits=db.visits.filter(v=>v.id!==id);saveDB();closeModal();alert("削除しました");spaDetail(window.currentVisit.spaId)}
