@@ -55,8 +55,8 @@ label{display:block;font-weight:700;margin:6px 0 4px}input,select,textarea{width
 <script>
 const KEY="spa_techo_v4";
 const defaultSpas=[
-{id:"laqua",name:"スパ ラクーア",rock:4,access:"—",fee:"—",quiet:"未評価",favorite:0,site:"https://www.laqua.jp/spa/",facility:["天然温泉","サウナ","休憩スペース","レストラン・カフェ"],feature:"都会の中で温泉・岩盤浴・サウナを楽しめる。"},
-{id:"miyamaedaira",name:"宮前平源泉 湯けむりの庄",rock:4,access:"—",fee:"—",quiet:"★★★★★",favorite:0,site:"https://www.yukemurinosato.com/miyamaedaira/",facility:["天然温泉","サウナ","休憩スペース","食事処"],feature:"源泉と岩盤浴をゆっくり楽しめる。"}
+{id:"laqua",name:"スパ ラクーア",rock:4,access:"—",fee:"—",favorite:0,site:"https://www.laqua.jp/spa/",facility:["天然温泉","サウナ","休憩スペース","レストラン・カフェ"],feature:"都会の中で温泉・岩盤浴・サウナを楽しめる。"},
+{id:"miyamaedaira",name:"宮前平源泉 湯けむりの庄",rock:4,access:"—",fee:"—",favorite:0,site:"https://www.yukemurinosato.com/miyamaedaira/",facility:["天然温泉","サウナ","休憩スペース","食事処"],feature:"源泉と岩盤浴をゆっくり楽しめる。"}
 ];
 let db;
 try{db=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){db=null}
@@ -92,7 +92,7 @@ function restoreData(input){
 }
 
 function topPage(){
-document.getElementById("app").innerHTML=`<div class="top-add"><button class="btn primary" onclick="spaEditor()">＋追加</button></div>
+document.getElementById("app").innerHTML=`<div class="top-add"><button class="btn primary" onclick="spaEditor()">＋追加</button> <button class="btn" onclick="uploadSpaData()">☁️共有保存</button> <button class="btn" onclick="downloadSpaData()">☁️クラウド復元</button></div>
 <div class="card">${db.spas.map(s=>`<button class="spa-name" onclick="spaDetail('${s.id}')">${esc(s.name)}</button>`).join("")}</div>
 <div class="card"><h2>💾 データ保護</h2><div class="actions"><button class="btn primary" onclick="backupData()">バックアップ</button><button class="btn" onclick="document.getElementById('restoreFile').click()">復元</button><input id="restoreFile" type="file" accept="application/json,.json" style="display:none" onchange="restoreData(this)"></div><div class="notice">登録したスパ・訪問記録をファイルに保存できます。</div></div>`;
 }
@@ -133,15 +133,15 @@ document.getElementById("app").innerHTML=`<div class="row visit-list-back"><butt
 }
 
 function spaEditor(id=null){
-const s=id?findSpa(id):{name:"",rock:"",access:"",fee:"",quiet:"",favorite:0,site:"",facility:[],feature:""};
+const s=id?findSpa(id):{name:"",rock:"",access:"",fee:"",favorite:0,site:"",facility:[],feature:""};
 document.getElementById("app").innerHTML=`<div class="row"><button class="btn" onclick="topPage()">← 戻る</button></div>
 <div class="card"><h1>${id?"スパ情報を編集":"スパ登録"}</h1>
 <label>スパ名称</label><input id="sn" value="${esc(s.name)}">
 <label>公式サイト</label><input id="ss" value="${esc(s.site)}" placeholder="https://">
 <label>岩盤浴の数</label><input id="sr" inputmode="numeric" value="${esc(s.rock||"")}">
-<label>アクセス</label><input id="sa" value="${esc(s.access||"")}">
+<label>アクセス</label><textarea id="sa" style="min-height:140px;font-size:19px">${esc(s.access||"")}</textarea>
 <label>料金</label><input id="sf" value="${esc(s.fee||"")}">
-<label>静かさ</label><input id="sq" value="${esc(s.quiet||"")}">
+
 <label>特徴</label><textarea id="sx" placeholder="施設の特徴">${esc(s.feature||"")}</textarea>
 <div class="actions" style="margin-top:14px"><button class="btn primary" onclick="saveSpa('${id||""}')">保存</button>${id?`<button class="btn danger" onclick="askDeleteSpa('${id}')">削除</button>`:""}</div>
 </div>`;
@@ -150,7 +150,7 @@ function saveSpa(id){
 const name=document.getElementById("sn").value.trim();
 if(!name){openModal(`<h2>スパ名称を入力してください</h2><div style="text-align:right"><button class="btn primary" onclick="closeModal()">OK</button></div>`);return}
 const s=id?findSpa(id):{id:uid("spa"),facility:[],favorite:0};
-s.name=name;s.site=document.getElementById("ss").value.trim();s.rock=document.getElementById("sr").value.trim();s.access=document.getElementById("sa").value.trim();s.fee=document.getElementById("sf").value.trim();s.quiet=document.getElementById("sq").value.trim();s.feature=document.getElementById("sx").value.trim();
+s.name=name;s.site=document.getElementById("ss").value.trim();s.rock=document.getElementById("sr").value.trim();s.access=document.getElementById("sa").value.trim();s.fee=document.getElementById("sf").value.trim();s.feature=document.getElementById("sx").value.trim();
 if(!id)db.spas.push(s);saveDB();
 openModal(`<h2>保存しました</h2><div style="text-align:right"><button type="button" id="spaSaveDoneBtn" class="btn primary">OK</button></div>`);
 const btn=document.getElementById("spaSaveDoneBtn");
@@ -229,5 +229,174 @@ function askDeleteVisit(){openModal(`<h2>この訪問記録を削除しますか
 function confirmDeleteVisit(){const id=window.currentVisit.id;db.visits=db.visits.filter(v=>v.id!==id);saveDB();closeModal();alert("削除しました");spaDetail(window.currentVisit.spaId)}
 topPage();
 </script>
-</body>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.18.0/firebase-app.js";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-firestore.js";
+
+import {
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signOut
+} from "https://www.gstatic.com/firebasejs/12.18.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAgMpxOYGAmXc-rT6Uvr5PTHtuEk29JTwo",
+  authDomain: "spa-techo.firebaseapp.com",
+  projectId: "spa-techo",
+  storageBucket: "spa-techo.firebasestorage.app",
+  messagingSenderId: "451191621188",
+  appId: "1:451191621188:web:086f6c7a2526ddd48d9e11"
+};
+
+const app = initializeApp(firebaseConfig);
+const firestore = getFirestore(app);
+const auth = getAuth(app);
+const CLOUD_REF = doc(firestore, "spa_techo", "shared");
+
+window.firebaseAuth = auth;
+
+window.loginSpa = async function(){
+  const email = document.getElementById("loginEmail").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  if (!email || !password) {
+    alert("メールアドレスとパスワードを入力してください");
+    return;
+  }
+
+  try {
+    await signInWithEmailAndPassword(auth, email, password);
+  } catch(e) {
+    console.error(e);
+    alert("ログインエラー: " + (e.code || e.message || e));
+  }
+};
+
+window.logoutSpa = async function(){
+  await signOut(auth);
+};
+
+window.uploadSpaData = async function(){
+  try {
+    const raw = localStorage.getItem("spa_techo_v4");
+
+    if (!raw) {
+      alert("保存するスパ手帳データがありません");
+      return false;
+    }
+
+    const data = JSON.parse(raw);
+    const size = new Blob([JSON.stringify(data)]).size;
+
+    console.log("共有データ容量:", size, "bytes");
+
+    if (size > 900000) {
+      alert("データ容量が大きいため、今回はクラウド保存を中止しました。\n写真を含むため容量が大きくなっている可能性があります。");
+      return false;
+    }
+
+    await setDoc(CLOUD_REF, {
+      data: data,
+      updatedAt: new Date().toISOString(),
+      updatedBy: auth.currentUser?.email || ""
+    });
+
+    alert("☁️ スパ手帳を共有保存しました");
+    return true;
+
+  } catch(e) {
+    console.error("クラウド保存エラー", e);
+    alert("クラウド保存できませんでした\n" + (e.message || e));
+    return false;
+  }
+};
+
+window.downloadSpaData = async function(){
+  try {
+    const snap = await getDoc(CLOUD_REF);
+
+    if (!snap.exists()) {
+      alert("☁️ クラウドにスパ手帳データがありません");
+      return false;
+    }
+
+    const cloud = snap.data();
+
+    if (!cloud.data) {
+      alert("クラウドのデータが見つかりません");
+      return false;
+    }
+
+    localStorage.setItem(
+      "spa_techo_v4",
+      JSON.stringify(cloud.data)
+    );
+
+    alert("☁️ クラウドからスパ手帳を復元しました");
+    location.reload();
+
+    return true;
+
+  } catch(e) {
+    console.error("クラウド復元エラー", e);
+    alert("クラウドから復元できませんでした\n" + (e.message || e));
+    return false;
+  }
+};
+
+function showLogin(){
+  const appEl = document.getElementById("app");
+  if (!appEl) return;
+
+  const html = [
+    '<div class="card" style="max-width:520px;margin:40px auto">',
+    '<h1 style="text-align:center">♨️ スパ手帳</h1>',
+    '<h2 style="text-align:center">☁️ 共有ログイン</h2>',
+    '<div style="margin-top:20px">',
+    '<label>メールアドレス</label>',
+    '<input id="loginEmail" type="email" autocomplete="username" style="width:100%;font-size:20px;padding:12px;margin-top:6px">',
+    '</div>',
+    '<div style="margin-top:16px">',
+    '<label>パスワード</label>',
+    '<input id="loginPassword" type="password" autocomplete="current-password" style="width:100%;font-size:20px;padding:12px;margin-top:6px">',
+    '</div>',
+    '<button class="btn primary" style="width:100%;margin-top:22px;font-size:20px" onclick="loginSpa()">☁️ ログイン</button>',
+    '</div>'
+  ].join("");
+
+  appEl.innerHTML = html;
+}
+onAuthStateChanged(auth, user => {
+  if (user) {
+    console.log("FirebaseログインOK:", user.email);
+
+    const top = document.getElementById("app");
+
+    if (top && !document.getElementById("firebaseUserBar")) {
+      const bar = document.createElement("div");
+      bar.id = "firebaseUserBar";
+      bar.style.cssText =
+        "position:fixed;top:8px;right:8px;z-index:9999;font-size:12px";
+
+      bar.innerHTML =
+        "☁️ " + user.email +
+        ' <button class="btn" onclick="logoutSpa()" style="font-size:12px;padding:4px 8px">ログアウト</button>';
+
+      document.body.appendChild(bar);
+    }
+
+  } else {
+    console.log("Firebase未ログイン");
+    showLogin();
+  }
+});
+
+console.log("Firebase共有＋ログイン機能 OK");
+</script></body>
 </html>
