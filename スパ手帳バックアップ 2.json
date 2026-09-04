@@ -1,0 +1,188 @@
+{
+  "spas": [
+    {
+      "id": "laqua",
+      "name": "スパ ラクーア",
+      "rock": "4",
+      "access": "初台→神保町→春日　29分",
+      "fee": "3,500〜　ヒーリングバーデ1,100",
+      "quiet": "⭐️⭐️⭐️⭐️",
+      "favorite": 4,
+      "site": "https://www.laqua.jp/spa/",
+      "facility": [
+        "天然温泉",
+        "サウナ",
+        "休憩スペース",
+        "レストラン・カフェ"
+      ],
+      "feature": "都会の中で温泉・岩盤浴・サウナを楽しめる。"
+    },
+    {
+      "id": "miyamaedaira",
+      "name": "宮前平源泉 湯けむりの庄",
+      "rock": "4",
+      "access": "南初台→渋谷→宮前平　１時間9分",
+      "fee": "1,650＋950＝2,600",
+      "quiet": "⭐️⭐️⭐️⭐️",
+      "favorite": 4,
+      "site": "https://www.yukemurinosato.com/miyamaedaira/",
+      "facility": [
+        "天然温泉",
+        "サウナ",
+        "休憩スペース",
+        "食事処"
+      ],
+      "feature": "源泉と岩盤浴をゆっくり楽しめる。"
+    },
+    {
+      "id": "spamsvbuqq3pe1g4",
+      "facility": [],
+      "favorite": 4,
+      "name": "綱島温泉　湯けむりの庄",
+      "site": "https://www.yukemurinosato.com/tsunashima/",
+      "rock": "5",
+      "access": "初台→新宿三丁目→綱島　54分　シャトルバスあり",
+      "fee": "1,700➕990🟰2,890",
+      "quiet": "⭐️⭐️⭐️⭐️",
+      "feature": "氷がニョキニョキ\nお食事処は激混みなので、予約必須"
+    },
+    {
+      "id": "spamsvcjl5guih31",
+      "facility": [],
+      "favorite": 0,
+      "name": "東京豊洲　万葉倶楽部",
+      "site": "https://tokyo-toyosu.manyo.co.jp/enjoytokyo_coupon//?mode=youtube&gad_source=1&gad_campaignid=23060081176&gclid=Cj0KCQjwnIDUBhDrARIsAJDGwSvpq4XZ0rjb5rjNSuKUJee3pPDbQteAWWzi0v1UBo5bOpfLlyF7vRAaAoHUEALw_wcB",
+      "rock": "1",
+      "access": "初台→市ヶ谷→豊洲→市場前　49分",
+      "fee": "3,850＋1,500＝5,350",
+      "quiet": "⭐️⭐️⭐️⭐️",
+      "feature": "ケムケム\n眺望◎"
+    },
+    {
+      "id": "spamsvcu5p9yanrz",
+      "facility": [],
+      "favorite": 0,
+      "name": "横浜みなとみらい万葉倶楽部",
+      "site": "https://manyo.co.jp/mm21/",
+      "rock": "4",
+      "access": "初台→新宿三丁目→みなとみらい　１時間4分",
+      "fee": "3,500＋1,400=4,900",
+      "quiet": "⭐️⭐️⭐️⭐️",
+      "feature": "岩盤浴でドリンクはおかわり自由\nペットボトル交換制"
+    },
+    {
+      "id": "spamsvd38lcxqruc",
+      "facility": [],
+      "favorite": 0,
+      "name": "花景の湯",
+      "site": "https://share.google/MttJorAUnfaGjmA1A",
+      "rock": "1",
+      "access": "初台→京王よみうりランド　42分　シャトルバス",
+      "fee": "2,800＋800=3,600",
+      "quiet": "⭐️⭐️⭐️⭐️",
+      "feature": "緑がたくさんあるガーデン🌲🌲🌲\n二人でサウナに入れる\nケムケム💨💨💨\n不定期でアウフグースあり"
+    },
+    {
+      "id": "spamsvdlppanrd9x",
+      "facility": [],
+      "favorite": 0,
+      "name": "泉天空の湯 有明ガーデン",
+      "site": "https://www.google.com/url?q=https://www.shopping-sumitomo-rd.com/ariake/spa-izumi/&sa=U&sqi=2&ved=2ahUKEwix24CttqSWAxUjr1YBHZ9gIrcQFnoECCQQAQ&usg=AOvVaw3Vo9mnV_4nQHVm6LgQVFZI",
+      "rock": "4",
+      "access": "初台→市ヶ谷→豊洲→有明　57分",
+      "fee": "3,800＋800=4,600",
+      "quiet": "⭐️⭐️⭐️⭐️",
+      "feature": "毎日アウフグースあり"
+    },
+    {
+      "id": "spamsve5rxm46ofm",
+      "facility": [],
+      "favorite": 0,
+      "name": "横浜青葉温泉 喜楽里別邸",
+      "site": "https://www.yurakirari.com/aoba/",
+      "rock": "3",
+      "access": "南初台→渋谷→長津田→こどもの国　１時間27分",
+      "fee": "1,450＋700=2,150",
+      "quiet": "⭐️⭐️⭐️⭐️",
+      "feature": "ケムケム💨\n竹林"
+    },
+    {
+      "id": "spamsveez2hm8rzl",
+      "facility": [],
+      "favorite": 0,
+      "name": "美楽温泉 SPA-HERBS（大宮）",
+      "site": "https://share.google/cGP1qfkqlVHSUH6KF",
+      "rock": "5",
+      "access": "初台→新宿→土呂　１時間16分",
+      "fee": "岩盤浴付きセット2,985",
+      "quiet": "⭐️⭐️⭐️⭐️",
+      "feature": "ドンドコ🥁🥁"
+    },
+    {
+      "id": "spamsvet8jue7iz7",
+      "facility": [],
+      "favorite": 0,
+      "name": "テルマー湯 西麻布",
+      "site": "https://share.google/Eovr9eKNtT10cA56k",
+      "rock": "2",
+      "access": "初台→新宿→六本木　44分",
+      "fee": "男性3,500 女性3,200 ヒーリングテラ900 休日割増900",
+      "quiet": "⭐️⭐️⭐️⭐️",
+      "feature": "ロウリューヒーリング\n１時間に１回サウンドロウリュ"
+    },
+    {
+      "id": "spamsvf3waz75qnt",
+      "facility": [],
+      "favorite": 0,
+      "name": "竹取の湯",
+      "site": "https://www.google.com/url?q=https://www.taketorinoyu.com/&sa=U&sqi=2&ved=2ahUKEwimmtvCv6SWAxXkkK8BHRD2OAQQFnoECCQQAQ&usg=AOvVaw1JxkRlJ4GUm-jwXlndD8ow",
+      "rock": "4",
+      "access": "初台→京王永山　50分",
+      "fee": "3,000 岩盤浴込み",
+      "quiet": "⭐️⭐️⭐️",
+      "feature": "石のジャリジャリ多🪨"
+    }
+  ],
+  "visits": [
+    {
+      "id": "visitmsv9bdyyh1v20",
+      "spaId": "laqua",
+      "date": "2026-08-10",
+      "companion": "二人",
+      "outbound": "",
+      "returnRoute": "東京ドームシティラクーア ⇒ プラウドフラット初台\n2026年8月10日(月)\n18:14 ⇒ 18:51\n------------------------------\n所要時間 37分\n運賃[IC優先] 360円\n乗換 1回\n距離 9.5 km\n------------------------------\n\n■東京ドームシティラクーア\n↓ 18:14〜18:16\n↓ 徒歩\n↓ 駅入口：A1\n↓ 入場：三田線春日1丁目方面改札\n■春日(東京都)\n↓ 18:20〜18:23\n↓ 都営三田線 日吉行\n↓ 1番線発 → 3番線着\n■神保町\n↓ 18:28〜18:38\n↓ 都営新宿線 橋本行\n↓ 1番線発 → 1番線着\n▼[乗換不要] 新宿\n↓ 18:40〜18:42\n↓ 京王新線区間急行 橋本行\n■初台\n↓ 18:42〜18:45\n↓ 駅内徒歩\n↓ 出場：中央口改札\n↓ 駅出口：南口\n↓ 18:45〜18:51\n↓ 徒歩\n■プラウドフラット初台\n---\n(運賃内訳)\n春日(東京都)〜初台 360円\n\n★PC・スマホでこの検索結果を見る\nhttps://yahoo.jp/nYEFsdU\n\n[Yahoo!乗換案内]\n↓ アプリのダウンロードはこちらから\nhttps://transit.yahoo.co.jp/smartphone/app/\n\n※定期代やチケット設定が含まれた検索結果は個人の設定に依存するため、上記の文面やリンク先の経路・料金が、送信元と受取先で一致しない場合がございますのでご注意ください。",
+      "transportFare": "380",
+      "transportQty": "1",
+      "fees": [
+        {
+          "name": "入館料",
+          "price": "4100",
+          "qty": "2"
+        },
+        {
+          "name": "岩盤浴",
+          "price": "1100",
+          "qty": "2"
+        },
+        {
+          "name": "クーポンドリンク",
+          "price": "300",
+          "qty": "2"
+        },
+        {
+          "name": "冷やし担々麺",
+          "price": "1450",
+          "qty": "1"
+        },
+        {
+          "name": "焼きチーズカレー",
+          "price": "1380",
+          "qty": "1"
+        }
+      ],
+      "memo": "",
+      "receipt": "",
+      "photos": []
+    }
+  ]
+}
